@@ -44,6 +44,16 @@ public class NameSorterTests
     }
 
     [Fact]
+    public void Keeps_duplicate_names()
+    {
+        var sorter = new NameSorter(new PersonNameComparer());
+
+        var sorted = sorter.Sort(Names("Leo Gardner", "Marin Alvarez", "Leo Gardner"));
+
+        Assert.Equal(new[] { "Marin Alvarez", "Leo Gardner", "Leo Gardner" }, sorted.Select(name => name.FullName));
+    }
+
+    [Fact]
     public void Does_not_change_the_list_it_was_given()
     {
         var unsorted = Names("Janet Parsons", "Marin Alvarez");

@@ -4,10 +4,12 @@ namespace DyeDurham.CodingAssessment.Parsing;
 
 /// <summary>
 /// Reads one name per line: the last word is the last name, the words before it are the given names.
-/// Blank lines are skipped. Extra spaces between words are ignored.
+/// Blank lines are skipped. Extra spaces or tabs between words are ignored.
 /// </summary>
 public sealed class NameParser : INameParser
 {
+    private static readonly char[] WordSeparators = { ' ', '\t' };
+
     public IReadOnlyList<PersonName> Parse(IEnumerable<string> lines)
     {
         var names = new List<PersonName>();
@@ -30,9 +32,10 @@ public sealed class NameParser : INameParser
 
     private static PersonName ParseLine(string line, int lineNumber)
     {
-        var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var words = line.Split(WordSeparators, StringSplitOptions.RemoveEmptyEntries);
         var givenNameCount = words.Length - 1;
 
+        // PersonName checks this rule too; it is checked here first so the error can name the line.
         if (givenNameCount < PersonName.MinGivenNames || givenNameCount > PersonName.MaxGivenNames)
         {
             throw new InvalidNameException(

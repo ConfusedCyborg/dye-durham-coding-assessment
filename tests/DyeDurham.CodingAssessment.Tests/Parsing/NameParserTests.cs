@@ -34,6 +34,14 @@ public class NameParserTests
     }
 
     [Fact]
+    public void Accepts_tabs_between_words()
+    {
+        var name = Assert.Single(_parser.Parse(new[] { "Janet\tParsons" }));
+
+        Assert.Equal("Janet Parsons", name.FullName);
+    }
+
+    [Fact]
     public void Skips_blank_lines()
     {
         var names = _parser.Parse(new[] { "Janet Parsons", "", "   ", "Vaughn Lewis" });

@@ -18,4 +18,15 @@ public sealed class FileNameSourceTests : IDisposable
 
         Assert.Equal(new[] { "Janet Parsons", "", "Vaughn Lewis" }, lines);
     }
+
+    [Fact]
+    public void Reads_files_saved_with_windows_line_endings_on_any_system()
+    {
+        var path = _folder.File("names.txt");
+        File.WriteAllText(path, "Janet Parsons\r\nVaughn Lewis\r\n");
+
+        var lines = new FileNameSource(path).ReadLines();
+
+        Assert.Equal(new[] { "Janet Parsons", "Vaughn Lewis" }, lines);
+    }
 }
