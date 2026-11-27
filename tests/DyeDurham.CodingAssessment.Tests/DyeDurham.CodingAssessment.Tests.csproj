@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\unsorted-names-list.txt" Link="TestData\unsorted-names-list.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\DyeDurham.CodingAssessment\DyeDurham.CodingAssessment.csproj" />
   </ItemGroup>
 
