@@ -1,23 +1,26 @@
-using DyeDurham.CodingAssessment.Domain;
 using DyeDurham.CodingAssessment.IO;
 
 namespace DyeDurham.CodingAssessment.Tests.IO;
 
 public class ConsoleNameOutputTests
 {
-    [Fact]
-    public void Write_TwoNames_PrintsOneFullNamePerLine()
+    public static TheoryData<string[]> NameLists => new()
+    {
+        Array.Empty<string>(),
+        new[] { "Marin Alvarez" },
+        new[] { "Marin Alvarez", "Adonis Julius Archer" },
+    };
+
+    [Theory]
+    [MemberData(nameof(NameLists))]
+    public void Write_Names_PrintsOneFullNamePerLine(string[] fullNames)
     {
         StringWriter screen = new();
         ConsoleNameOutput output = new(screen);
 
-        output.Write(new[]
-        {
-            new PersonName(new[] { "Marin" }, "Alvarez"),
-            new PersonName(new[] { "Adonis", "Julius" }, "Archer"),
-        });
+        output.Write(TestNames.From(fullNames));
 
-        string expected = "Marin Alvarez" + Environment.NewLine + "Adonis Julius Archer" + Environment.NewLine;
+        string expected = string.Concat(fullNames.Select(fullName => fullName + Environment.NewLine));
         Assert.Equal(expected, screen.ToString());
     }
 }

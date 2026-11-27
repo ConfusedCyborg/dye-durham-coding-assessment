@@ -32,7 +32,14 @@ dotnet test
 ```
 
 The end-to-end tests run the real program in a temporary folder, so they also check the screen output,
-the written file and the exit codes.
+the written file and the exit codes. Each feature is tested both with valid input and with the input
+that should fail, mostly as xUnit theories so one test covers several cases.
+
+To measure coverage (100% of lines and branches at the time of writing):
+
+```
+dotnet test --collect:"XPlat Code Coverage"
+```
 
 ## Input
 

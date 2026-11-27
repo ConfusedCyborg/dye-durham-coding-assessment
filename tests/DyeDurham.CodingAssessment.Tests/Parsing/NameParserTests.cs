@@ -7,67 +7,43 @@ public class NameParserTests
 {
     private readonly NameParser _parser = new();
 
-    [Fact]
-    public void Parse_ThreeGivenNames_UsesLastWordAsLastName()
+    [Theory]
+    [InlineData("Janet Parsons", "Janet", "Parsons")]
+    [InlineData("Adonis Julius Archer", "Adonis Julius", "Archer")]
+    [InlineData("Hunter Uriah Mathew Clarke", "Hunter Uriah Mathew", "Clarke")]
+    [InlineData("  Adonis   Julius  Archer  ", "Adonis Julius", "Archer")]
+    [InlineData("Janet\tParsons", "Janet", "Parsons")]
+    public void Parse_ValidLine_UsesLastWordAsLastNameAndTheRestAsGivenNames(
+        string line, string expectedGivenNames, string expectedLastName)
     {
-        IReadOnlyList<PersonName> names = _parser.Parse(new[] { "Hunter Uriah Mathew Clarke" });
+        PersonName name = Assert.Single(_parser.Parse(new[] { line }));
 
-        PersonName name = Assert.Single(names);
-        Assert.Equal(new[] { "Hunter", "Uriah", "Mathew" }, name.GivenNames);
-        Assert.Equal("Clarke", name.LastName);
+        Assert.Equal(expectedGivenNames.Split(' '), name.GivenNames);
+        Assert.Equal(expectedLastName, name.LastName);
     }
 
-    [Fact]
-    public void Parse_OneGivenName_ReturnsGivenAndLastName()
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("\t")]
+    public void Parse_BlankLine_SkipsIt(string blankLine)
     {
-        PersonName name = Assert.Single(_parser.Parse(new[] { "Janet Parsons" }));
+        IReadOnlyList<PersonName> names = _parser.Parse(new[] { "Janet Parsons", blankLine, "Vaughn Lewis" });
 
-        Assert.Equal(new[] { "Janet" }, name.GivenNames);
-        Assert.Equal("Parsons", name.LastName);
+        Assert.Equal(new[] { "Janet Parsons", "Vaughn Lewis" }, names.Select(name => name.FullName));
     }
 
-    [Fact]
-    public void Parse_ExtraSpaces_IgnoresThem()
+    [Theory]
+    [InlineData("Madonna")]
+    [InlineData("  Cher  ")]
+    [InlineData("One Two Three Four Last")]
+    public void Parse_InvalidLine_ThrowsWithLineNumberCountingBlankLines(string invalidLine)
     {
-        PersonName name = Assert.Single(_parser.Parse(new[] { "  Adonis   Julius  Archer  " }));
-
-        Assert.Equal("Adonis Julius Archer", name.FullName);
-    }
-
-    [Fact]
-    public void Parse_TabBetweenWords_TreatsTabAsSeparator()
-    {
-        PersonName name = Assert.Single(_parser.Parse(new[] { "Janet\tParsons" }));
-
-        Assert.Equal("Janet Parsons", name.FullName);
-    }
-
-    [Fact]
-    public void Parse_BlankLines_SkipsThem()
-    {
-        IReadOnlyList<PersonName> names = _parser.Parse(new[] { "Janet Parsons", "", "   ", "Vaughn Lewis" });
-
-        Assert.Equal(new[] { "Janet Parsons", "Vaughn Lewis" }, names.Select(n => n.FullName));
-    }
-
-    [Fact]
-    public void Parse_NoGivenName_ThrowsWithLineNumber()
-    {
-        string[] lines = new[] { "Janet Parsons", "", "Madonna" };
+        string[] lines = new[] { "Janet Parsons", "", invalidLine };
 
         InvalidNameException exception = Assert.Throws<InvalidNameException>(() => _parser.Parse(lines));
 
         Assert.Equal(3, exception.LineNumber);
-        Assert.Contains("Madonna", exception.Message);
-    }
-
-    [Fact]
-    public void Parse_FourGivenNames_ThrowsWithLineNumber()
-    {
-        string[] lines = new[] { "One Two Three Four Last" };
-
-        InvalidNameException exception = Assert.Throws<InvalidNameException>(() => _parser.Parse(lines));
-
-        Assert.Equal(1, exception.LineNumber);
+        Assert.Contains(invalidLine.Trim(), exception.Message);
     }
 }

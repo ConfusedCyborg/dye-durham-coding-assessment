@@ -1,4 +1,3 @@
-using DyeDurham.CodingAssessment.Domain;
 using DyeDurham.CodingAssessment.IO;
 
 namespace DyeDurham.CodingAssessment.Tests.IO;
@@ -9,14 +8,22 @@ public sealed class FileNameOutputTests : IDisposable
 
     public void Dispose() => _folder.Dispose();
 
-    [Fact]
-    public void Write_TwoNames_WritesOneFullNamePerLine()
+    public static TheoryData<string[]> NameLists => new()
+    {
+        Array.Empty<string>(),
+        new[] { "Marin Alvarez" },
+        new[] { "Marin Alvarez", "Adonis Julius Archer" },
+    };
+
+    [Theory]
+    [MemberData(nameof(NameLists))]
+    public void Write_Names_WritesOneFullNamePerLine(string[] fullNames)
     {
         string path = _folder.File("sorted.txt");
 
-        new FileNameOutput(path).Write(new[] { Name("Marin", "Alvarez"), Name("Adonis Julius", "Archer") });
+        new FileNameOutput(path).Write(TestNames.From(fullNames));
 
-        Assert.Equal(new[] { "Marin Alvarez", "Adonis Julius Archer" }, File.ReadAllLines(path));
+        Assert.Equal(fullNames, File.ReadAllLines(path));
     }
 
     [Fact]
@@ -25,11 +32,20 @@ public sealed class FileNameOutputTests : IDisposable
         string path = _folder.File("sorted.txt");
         File.WriteAllLines(path, new[] { "Old Name", "Another Old Name", "Third Old Name" });
 
-        new FileNameOutput(path).Write(new[] { Name("Marin", "Alvarez") });
+        new FileNameOutput(path).Write(TestNames.From("Marin Alvarez"));
 
         Assert.Equal(new[] { "Marin Alvarez" }, File.ReadAllLines(path));
     }
 
-    private static PersonName Name(string givenNames, string lastName) =>
-        new(givenNames.Split(' '), lastName);
+    [Fact]
+    public void Write_ReadOnlyFile_ThrowsUnauthorizedAccessException()
+    {
+        string path = _folder.File("sorted.txt");
+        File.WriteAllText(path, "");
+        File.SetAttributes(path, FileAttributes.ReadOnly);
+
+        FileNameOutput output = new(path);
+
+        Assert.Throws<UnauthorizedAccessException>(() => output.Write(TestNames.From("Marin Alvarez")));
+    }
 }

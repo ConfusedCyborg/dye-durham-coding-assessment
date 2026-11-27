@@ -50,58 +50,54 @@ public sealed class NameSorterCommandTests : IDisposable
         Assert.Equal(ExpectedSortedExample, File.ReadAllLines(_workingFolder.File("sorted-names-list.txt")));
     }
 
-    [Fact]
-    public void Run_AccentedNames_PrintsThemCorrectly()
+    [Theory]
+    [InlineData("Janet Parsons\nMarin Alvarez\n", new[] { "Marin Alvarez", "Janet Parsons" })]
+    [InlineData("Émile Émond\nAdam Fisher\n", new[] { "Émile Émond", "Adam Fisher" })]
+    [InlineData("", new string[0])]
+    public void Run_ValidFile_PrintsAndWritesSortedNamesAndExitsWith0(string content, string[] expected)
     {
-        File.WriteAllLines(_workingFolder.File("names.txt"), new[] { "Émile Émond" });
-
-        CommandResult result = RunNameSorter("./names.txt");
-
-        Assert.Equal(new[] { "Émile Émond" }, Lines(result.Output));
-    }
-
-    [Fact]
-    public void Run_EmptyFile_WritesEmptyFile()
-    {
-        File.WriteAllText(_workingFolder.File("names.txt"), "");
+        File.WriteAllText(_workingFolder.File("names.txt"), content);
 
         CommandResult result = RunNameSorter("./names.txt");
 
         Assert.Equal(0, result.ExitCode);
-        Assert.Empty(File.ReadAllLines(_workingFolder.File("sorted-names-list.txt")));
+        Assert.Equal(expected, Lines(result.Output));
+        Assert.Equal(expected, File.ReadAllLines(_workingFolder.File("sorted-names-list.txt")));
     }
 
-    [Fact]
-    public void Run_NoArguments_PrintsUsageAndExitsWith1()
+    public static TheoryData<string[]> WrongArgumentCounts => new()
     {
-        CommandResult result = RunNameSorter();
+        Array.Empty<string>(),
+        new[] { "first.txt", "second.txt" },
+    };
+
+    [Theory]
+    [MemberData(nameof(WrongArgumentCounts))]
+    public void Run_NotExactlyOneArgument_PrintsUsageAndExitsWith1(string[] arguments)
+    {
+        CommandResult result = RunNameSorter(arguments);
 
         Assert.Equal(1, result.ExitCode);
         Assert.Contains("Usage: name-sorter", result.Error);
     }
 
-    [Fact]
-    public void Run_TwoArguments_PrintsUsageAndExitsWith1()
+    [Theory]
+    [InlineData("./missing.txt")]
+    [InlineData("./missing-folder/names.txt")]
+    public void Run_MissingFile_NamesFileAndExitsWith2(string path)
     {
-        CommandResult result = RunNameSorter("first.txt", "second.txt");
-
-        Assert.Equal(1, result.ExitCode);
-        Assert.Contains("Usage: name-sorter", result.Error);
-    }
-
-    [Fact]
-    public void Run_MissingFile_NamesFileAndExitsWith2()
-    {
-        CommandResult result = RunNameSorter("./missing.txt");
+        CommandResult result = RunNameSorter(path);
 
         Assert.Equal(2, result.ExitCode);
-        Assert.Contains("missing.txt", result.Error);
+        Assert.Contains(path, result.Error);
     }
 
-    [Fact]
-    public void Run_InvalidName_ReportsLineAndExitsWith3WithoutWritingFile()
+    [Theory]
+    [InlineData("Madonna")]
+    [InlineData("One Two Three Four Last")]
+    public void Run_InvalidName_ReportsLineAndExitsWith3WithoutWritingFile(string invalidLine)
     {
-        File.WriteAllLines(_workingFolder.File("names.txt"), new[] { "Janet Parsons", "Madonna" });
+        File.WriteAllLines(_workingFolder.File("names.txt"), new[] { "Janet Parsons", invalidLine });
 
         CommandResult result = RunNameSorter("./names.txt");
 

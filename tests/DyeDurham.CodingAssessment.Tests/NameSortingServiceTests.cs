@@ -7,33 +7,39 @@ namespace DyeDurham.CodingAssessment.Tests;
 
 public class NameSortingServiceTests
 {
-    [Fact]
-    public void Run_ValidNames_WritesSameSortedListToEveryOutput()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void Run_ValidNames_WritesSameSortedListToEveryOutput(int outputCount)
     {
         InMemoryNameSource source = new("Janet Parsons", "Marin Alvarez", "Adonis Julius Archer");
-        InMemoryNameOutput screen = new();
-        InMemoryNameOutput file = new();
-        NameSortingService service = CreateService(source, screen, file);
+        InMemoryNameOutput[] outputs = CreateOutputs(outputCount);
+        NameSortingService service = CreateService(source, outputs);
 
         service.Run();
 
         string[] expected = new[] { "Marin Alvarez", "Adonis Julius Archer", "Janet Parsons" };
-        Assert.Equal(expected, screen.WrittenNames);
-        Assert.Equal(expected, file.WrittenNames);
+        Assert.All(outputs, output => Assert.Equal(expected, output.WrittenNames));
     }
 
-    [Fact]
-    public void Run_InvalidName_WritesNothing()
+    [Theory]
+    [InlineData("Madonna")]
+    [InlineData("One Two Three Four Last")]
+    public void Run_InvalidName_ThrowsAndWritesNothing(string invalidLine)
     {
-        InMemoryNameSource source = new("Janet Parsons", "Madonna");
-        InMemoryNameOutput output = new();
-        NameSortingService service = CreateService(source, output);
+        InMemoryNameSource source = new("Janet Parsons", invalidLine);
+        InMemoryNameOutput[] outputs = CreateOutputs(2);
+        NameSortingService service = CreateService(source, outputs);
 
         Assert.Throws<InvalidNameException>(() => service.Run());
-        Assert.Empty(output.WrittenNames);
+        Assert.All(outputs, output => Assert.Empty(output.WrittenNames));
     }
 
-    private static NameSortingService CreateService(INameSource source, params INameOutput[] outputs) =>
+    private static InMemoryNameOutput[] CreateOutputs(int count) =>
+        Enumerable.Range(0, count).Select(_ => new InMemoryNameOutput()).ToArray();
+
+    private static NameSortingService CreateService(INameSource source, IEnumerable<INameOutput> outputs) =>
         new(source, new NameParser(), new NameSorter(), outputs);
 
     private sealed class InMemoryNameSource : INameSource

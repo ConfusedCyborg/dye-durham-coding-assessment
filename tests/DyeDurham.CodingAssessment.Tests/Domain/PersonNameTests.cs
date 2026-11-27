@@ -4,16 +4,20 @@ namespace DyeDurham.CodingAssessment.Tests.Domain;
 
 public class PersonNameTests
 {
-    [Fact]
-    public void FullName_ThreeGivenNames_JoinsAllPartsWithSpaces()
+    [Theory]
+    [InlineData("Janet", "Parsons", "Janet Parsons")]
+    [InlineData("Adonis Julius", "Archer", "Adonis Julius Archer")]
+    [InlineData("Hunter Uriah Mathew", "Clarke", "Hunter Uriah Mathew Clarke")]
+    public void FullName_GivenAndLastNames_JoinsThemWithSpaces(string givenNames, string lastName, string expected)
     {
-        PersonName name = new(new[] { "Hunter", "Uriah", "Mathew" }, "Clarke");
+        PersonName name = new(givenNames.Split(' '), lastName);
 
-        Assert.Equal("Hunter Uriah Mathew Clarke", name.FullName);
+        Assert.Equal(expected, name.FullName);
     }
 
     [Theory]
     [InlineData(1)]
+    [InlineData(2)]
     [InlineData(3)]
     public void Constructor_OneToThreeGivenNames_CreatesName(int givenNameCount)
     {
@@ -27,38 +31,12 @@ public class PersonNameTests
     [Theory]
     [InlineData(0)]
     [InlineData(4)]
-    public void Constructor_ZeroOrFourGivenNames_ThrowsArgumentException(int givenNameCount)
+    [InlineData(5)]
+    public void Constructor_TooFewOrTooManyGivenNames_ThrowsArgumentException(int givenNameCount)
     {
         string[] givenNames = Enumerable.Repeat("Given", givenNameCount).ToArray();
 
         Assert.Throws<ArgumentException>(() => new PersonName(givenNames, "Last"));
-    }
-
-    [Theory]
-    [InlineData(0, false)]
-    [InlineData(1, true)]
-    [InlineData(3, true)]
-    [InlineData(4, false)]
-    public void IsValidGivenNameCount_Count_ReturnsWhetherOneToThree(int givenNameCount, bool expected)
-    {
-        Assert.Equal(expected, PersonName.IsValidGivenNameCount(givenNameCount));
-    }
-
-    [Fact]
-    public void GivenNameAt_ExistingPosition_ReturnsGivenName()
-    {
-        PersonName name = new(new[] { "Adonis", "Julius" }, "Archer");
-
-        Assert.Equal("Adonis", name.GivenNameAt(0));
-        Assert.Equal("Julius", name.GivenNameAt(1));
-    }
-
-    [Fact]
-    public void GivenNameAt_PositionPastLastGivenName_ReturnsNull()
-    {
-        PersonName name = new(new[] { "Adonis", "Julius" }, "Archer");
-
-        Assert.Null(name.GivenNameAt(2));
     }
 
     [Fact]
@@ -70,5 +48,36 @@ public class PersonNameTests
         givenNames[0] = "Changed";
 
         Assert.Equal("Janet", name.GivenNames[0]);
+    }
+
+    [Theory]
+    [InlineData(1, true)]
+    [InlineData(2, true)]
+    [InlineData(3, true)]
+    [InlineData(0, false)]
+    [InlineData(4, false)]
+    [InlineData(-1, false)]
+    public void IsValidGivenNameCount_Count_ReturnsWhetherOneToThree(int givenNameCount, bool expected)
+    {
+        Assert.Equal(expected, PersonName.IsValidGivenNameCount(givenNameCount));
+    }
+
+    [Theory]
+    [InlineData(0, "Adonis")]
+    [InlineData(1, "Julius")]
+    [InlineData(2, null)]
+    public void GivenNameAt_Position_ReturnsGivenNameOrNullWhenMissing(int position, string? expected)
+    {
+        PersonName name = new(new[] { "Adonis", "Julius" }, "Archer");
+
+        Assert.Equal(expected, name.GivenNameAt(position));
+    }
+
+    [Fact]
+    public void GivenNameAt_NegativePosition_ThrowsArgumentOutOfRangeException()
+    {
+        PersonName name = new(new[] { "Adonis", "Julius" }, "Archer");
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => name.GivenNameAt(-1));
     }
 }
