@@ -1,5 +1,7 @@
 # Name Sorter
 
+[![Build and test](https://github.com/ConfusedCyborg/dye-durham-coding-assessment/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ConfusedCyborg/dye-durham-coding-assessment/actions/workflows/build.yml)
+
 A console app that sorts a list of names by last name, then by given names.
 It prints the sorted list to the screen and writes it to `sorted-names-list.txt` in the current folder,
 replacing that file if it already exists.
