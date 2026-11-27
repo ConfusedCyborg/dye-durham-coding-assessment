@@ -12,7 +12,7 @@ public sealed class PersonName
     {
         var givenNameList = givenNames.ToList();
 
-        if (givenNameList.Count < MinGivenNames || givenNameList.Count > MaxGivenNames)
+        if (!IsValidGivenNameCount(givenNameList.Count))
         {
             throw new ArgumentException(
                 $"A name must have between {MinGivenNames} and {MaxGivenNames} given names, but had {givenNameList.Count}.",
@@ -22,6 +22,9 @@ public sealed class PersonName
         GivenNames = givenNameList.AsReadOnly();
         LastName = lastName;
     }
+
+    public static bool IsValidGivenNameCount(int count) =>
+        count >= MinGivenNames && count <= MaxGivenNames;
 
     public IReadOnlyList<string> GivenNames { get; }
 

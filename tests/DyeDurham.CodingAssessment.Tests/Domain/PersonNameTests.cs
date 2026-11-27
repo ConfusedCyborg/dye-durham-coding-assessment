@@ -34,6 +34,16 @@ public class PersonNameTests
         Assert.Throws<ArgumentException>(() => new PersonName(givenNames, "Last"));
     }
 
+    [Theory]
+    [InlineData(0, false)]
+    [InlineData(1, true)]
+    [InlineData(3, true)]
+    [InlineData(4, false)]
+    public void IsValidGivenNameCount_Count_ReturnsWhetherOneToThree(int givenNameCount, bool expected)
+    {
+        Assert.Equal(expected, PersonName.IsValidGivenNameCount(givenNameCount));
+    }
+
     [Fact]
     public void GivenNameAt_ExistingPosition_ReturnsGivenName()
     {

@@ -10,33 +10,21 @@ public sealed class NameParser : INameParser
 {
     private static readonly char[] WordSeparators = { ' ', '\t' };
 
-    public IReadOnlyList<PersonName> Parse(IEnumerable<string> lines)
-    {
-        var names = new List<PersonName>();
-        var lineNumber = 0;
-
-        foreach (var line in lines)
-        {
-            lineNumber++;
-
-            if (string.IsNullOrWhiteSpace(line))
-            {
-                continue;
-            }
-
-            names.Add(ParseLine(line, lineNumber));
-        }
-
-        return names;
-    }
+    public IReadOnlyList<PersonName> Parse(IEnumerable<string> lines) =>
+        lines
+            .Select((text, index) => (Text: text, Number: index + 1))
+            .Where(line => !string.IsNullOrWhiteSpace(line.Text))
+            .Select(line => ParseLine(line.Text, line.Number))
+            .ToList();
 
     private static PersonName ParseLine(string line, int lineNumber)
     {
         var words = line.Split(WordSeparators, StringSplitOptions.RemoveEmptyEntries);
-        var givenNameCount = words.Length - 1;
+        var givenNames = words.SkipLast(1).ToArray();
+        var lastName = words.Last();
 
-        // PersonName checks this rule too; it is checked here first so the error can name the line.
-        if (givenNameCount < PersonName.MinGivenNames || givenNameCount > PersonName.MaxGivenNames)
+        // Checked here, before PersonName checks it too, so the error can say which line is wrong.
+        if (!PersonName.IsValidGivenNameCount(givenNames.Length))
         {
             throw new InvalidNameException(
                 lineNumber,
@@ -44,6 +32,6 @@ public sealed class NameParser : INameParser
                 $"expected {PersonName.MinGivenNames} to {PersonName.MaxGivenNames} given names followed by a last name.");
         }
 
-        return new PersonName(givenNames: words[..^1], lastName: words[^1]);
+        return new PersonName(givenNames, lastName);
     }
 }
