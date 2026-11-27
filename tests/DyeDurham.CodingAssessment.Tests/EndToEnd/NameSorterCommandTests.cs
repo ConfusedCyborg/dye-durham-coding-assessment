@@ -107,7 +107,7 @@ public sealed class NameSorterCommandTests : IDisposable
     }
 
     [Fact]
-    public void Run_ReadOnlyOutputFile_ExitsWith4()
+    public void Run_ReadOnlyOutputFile_ExitsWith4WithoutPrintingNames()
     {
         CopyExampleIntoWorkingFolder();
         string sortedFile = _workingFolder.File("sorted-names-list.txt");
@@ -118,6 +118,7 @@ public sealed class NameSorterCommandTests : IDisposable
 
         Assert.Equal(4, result.ExitCode);
         Assert.Contains("sorted-names-list.txt", result.Error);
+        Assert.Empty(result.Output);
     }
 
     private void CopyExampleIntoWorkingFolder()

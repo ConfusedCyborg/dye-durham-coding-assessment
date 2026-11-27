@@ -46,10 +46,11 @@ static NameSortingService CreateService(string unsortedFilePath) =>
         new FileNameSource(unsortedFilePath),
         new NameParser(),
         new NameSorter(),
+        // The file comes first: if it cannot be written, nothing is printed and the run is clearly a failure.
         new INameOutput[]
         {
-            new ConsoleNameOutput(Console.Out),
             new FileNameOutput(SortedFileName),
+            new ConsoleNameOutput(Console.Out),
         });
 
 static int Fail(int exitCode, string message)
