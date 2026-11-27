@@ -13,6 +13,7 @@ public class NameParserTests
     [InlineData("Hunter Uriah Mathew Clarke", "Hunter Uriah Mathew", "Clarke")]
     [InlineData("  Adonis   Julius  Archer  ", "Adonis Julius", "Archer")]
     [InlineData("Janet\tParsons", "Janet", "Parsons")]
+    [InlineData("Janet Parsons", "Janet", "Parsons")] // Non-breaking space, as pasted from Word or a web page.
     public void Parse_ValidLine_UsesLastWordAsLastNameAndTheRestAsGivenNames(
         string line, string expectedGivenNames, string expectedLastName)
     {

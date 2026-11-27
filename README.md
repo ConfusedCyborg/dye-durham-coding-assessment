@@ -46,7 +46,7 @@ dotnet test --collect:"XPlat Code Coverage"
 ## Input
 
 One name per line: one to three given names, then the last name as the last word.
-Blank lines are skipped and extra spaces or tabs between words are ignored.
+Blank lines are skipped and extra whitespace between words (spaces, tabs, non-breaking spaces) is ignored.
 
 ## Sorting rule
 

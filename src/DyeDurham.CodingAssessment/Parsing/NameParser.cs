@@ -4,12 +4,13 @@ namespace DyeDurham.CodingAssessment.Parsing;
 
 /// <summary>
 /// Reads one name per line: the last word is the last name, the words before it are the given names.
-/// Blank lines are skipped. Extra spaces or tabs between words are ignored.
+/// Blank lines are skipped. Extra whitespace between words (spaces, tabs, non-breaking spaces) is ignored.
 /// Every line is checked before anything is returned, so all invalid lines are reported together.
 /// </summary>
 public sealed class NameParser : INameParser
 {
-    private static readonly char[] WordSeparators = { ' ', '\t' };
+    // string.Split treats a null separator list as "any whitespace": spaces, tabs, non-breaking spaces and so on.
+    private static readonly char[]? AnyWhitespace = null;
 
     public IReadOnlyList<PersonName> Parse(IEnumerable<string> lines)
     {
@@ -38,7 +39,7 @@ public sealed class NameParser : INameParser
     /// </summary>
     private sealed record NameLine(int LineNumber, string Text)
     {
-        private string[] Words { get; } = Text.Split(WordSeparators, StringSplitOptions.RemoveEmptyEntries);
+        private string[] Words { get; } = Text.Split(AnyWhitespace, StringSplitOptions.RemoveEmptyEntries);
 
         public bool IsBlank => Words.Length == 0;
 
