@@ -9,4 +9,5 @@ public static class ExitCodes
     public const int WrongArguments = 1;
     public const int FileNotFound = 2;
     public const int InvalidName = 3;
+    public const int FileError = 4;
 }
