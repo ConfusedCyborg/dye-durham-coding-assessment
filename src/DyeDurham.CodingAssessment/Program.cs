@@ -4,7 +4,8 @@ using DyeDurham.CodingAssessment.IO;
 using DyeDurham.CodingAssessment.Parsing;
 using DyeDurham.CodingAssessment.Sorting;
 
-// Entry point and composition root: the only place that picks the concrete classes.
+// Usage: name-sorter <path to a file with one name per line>
+// Prints the sorted names and writes them to sorted-names-list.txt in the current folder.
 
 const string SortedFileName = "sorted-names-list.txt";
 
@@ -13,41 +14,45 @@ Console.OutputEncoding = Encoding.UTF8;
 
 if (args.Length != 1)
 {
-    Console.Error.WriteLine("Usage: name-sorter <path to a file with one name per line>");
-    return ExitCodes.WrongArguments;
+    return Fail(ExitCodes.WrongArguments, "Usage: name-sorter <path to a file with one name per line>");
 }
 
 string unsortedFilePath = args[0];
 
 if (!File.Exists(unsortedFilePath))
 {
-    Console.Error.WriteLine($"Could not find the file \"{unsortedFilePath}\".");
-    return ExitCodes.FileNotFound;
+    return Fail(ExitCodes.FileNotFound, $"Could not find the file \"{unsortedFilePath}\".");
 }
-
-NameSortingService service = new(
-    new FileNameSource(unsortedFilePath),
-    new NameParser(),
-    new NameSorter(),
-    new INameOutput[]
-    {
-        new ConsoleNameOutput(Console.Out),
-        new FileNameOutput(SortedFileName),
-    });
 
 try
 {
-    service.Run();
+    CreateService(unsortedFilePath).Run();
     return ExitCodes.Success;
 }
 catch (InvalidNameException exception)
 {
-    Console.Error.WriteLine($"Could not sort the names. {exception.Message}");
-    return ExitCodes.InvalidName;
+    return Fail(ExitCodes.InvalidName, $"Could not sort the names. {exception.Message}");
 }
 catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
 {
     // For example a locked input file, or a read-only sorted-names-list.txt.
-    Console.Error.WriteLine($"Could not read or write a file. {exception.Message}");
-    return ExitCodes.FileError;
+    return Fail(ExitCodes.FileError, $"Could not read or write a file. {exception.Message}");
+}
+
+// Composition root: the only place that picks the concrete classes.
+static NameSortingService CreateService(string unsortedFilePath) =>
+    new(
+        new FileNameSource(unsortedFilePath),
+        new NameParser(),
+        new NameSorter(),
+        new INameOutput[]
+        {
+            new ConsoleNameOutput(Console.Out),
+            new FileNameOutput(SortedFileName),
+        });
+
+static int Fail(int exitCode, string message)
+{
+    Console.Error.WriteLine(message);
+    return exitCode;
 }
