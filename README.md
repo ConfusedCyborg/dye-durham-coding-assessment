@@ -6,7 +6,7 @@ replacing that file if it already exists.
 
 ## Requirements
 
-The .NET 8 SDK (8.0.418 or a later 8.0 SDK, see `global.json`).
+The .NET 10 SDK (10.0.103 or a later 10.0 SDK, see `global.json`).
 
 ## Run
 
