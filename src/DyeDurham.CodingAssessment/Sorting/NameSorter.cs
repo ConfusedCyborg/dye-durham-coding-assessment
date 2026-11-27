@@ -14,10 +14,12 @@ public sealed class NameSorter : INameSorter
     public IReadOnlyList<PersonName> Sort(IEnumerable<PersonName> names) =>
         names
             .OrderBy(name => name.LastName, IgnoringCase)
+            // One step per given name position, up to PersonName.MaxGivenNames (3).
             .ThenBy(name => name.GivenNameAt(0), IgnoringCase)
             .ThenBy(name => name.GivenNameAt(1), IgnoringCase)
             .ThenBy(name => name.GivenNameAt(2), IgnoringCase)
-            // Names equal apart from case are ordered by their exact characters, so the order never changes between runs.
+            // Names equal apart from case ("Adam Smith", "adam smith") always come out upper case first,
+            // whatever order the file had them in.
             .ThenBy(name => name.FullName, StringComparer.Ordinal)
             .ToList();
 }

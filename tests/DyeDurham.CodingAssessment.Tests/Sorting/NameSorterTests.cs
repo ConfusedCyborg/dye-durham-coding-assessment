@@ -44,14 +44,17 @@ public class NameSorterTests
     }
 
     [Theory]
-    [InlineData("Zoe Alvarez", "Adam Bentley")]         // Last name decides first.
-    [InlineData("Adam John Smith", "Adam Peter Smith")] // Same last name: given names decide.
-    [InlineData("Adam Zed Smith", "Beth Ann Smith")]    // The first given name decides before the second.
-    [InlineData("Adam Smith", "Adam John Smith")]       // Shared given names match: fewer given names first.
-    [InlineData("adam archer", "Brian Baker")]          // Case is ignored ("Baker" would come first otherwise).
-    [InlineData("adam smith", "Zoe Smith")]             // Given names decide before case does.
-    [InlineData("Zoe Émond", "Adam Fisher")]            // Accented letters sort next to their plain letters.
-    [InlineData("Adam Smith", "adam smith")]            // Equal apart from case: upper case first.
+    [InlineData("Zoe Alvarez", "Adam Bentley")]                  // Last name decides first.
+    [InlineData("Adam John Smith", "Adam Peter Smith")]          // Same last name: given names decide.
+    [InlineData("Adam Zed Smith", "Beth Ann Smith")]             // The first given name decides before the second.
+    [InlineData("Adam Smith", "Adam John Smith")]                // Shared given names match: fewer given names first.
+    [InlineData("Adam John Smith", "Adam John Brian Smith")]     // Same rule at the third given name.
+    [InlineData("adam archer", "Brian Baker")]                   // Case is ignored ("Baker" would come first otherwise).
+    [InlineData("Adam bob Smith", "Adam Carl Smith")]            // Case is ignored on the second given name.
+    [InlineData("Adam John carl Smith", "Adam John Dave Smith")] // Case is ignored on the third given name.
+    [InlineData("adam smith", "Zoe Smith")]                      // Given names decide before case does.
+    [InlineData("Zoe Émond", "Adam Fisher")]                     // Accented letters sort next to their plain letters.
+    [InlineData("Adam Smith", "adam smith")]                     // Equal apart from case: upper case first.
     public void Sort_TwoNamesInEitherOrder_PutsThemInRuleOrder(string expectedFirst, string expectedSecond)
     {
         string[] expected = new[] { expectedFirst, expectedSecond };

@@ -56,7 +56,7 @@ Blank lines are skipped and extra spaces or tabs between words are ignored.
 
 Upper and lower case are treated the same, and accented letters sort next to their plain letters
 (invariant culture, case insensitive). Names that differ only by case are then ordered by their exact
-characters, so the output is the same on every run.
+characters (upper case first), so the result does not depend on the order of the input file.
 
 ## Errors
 
