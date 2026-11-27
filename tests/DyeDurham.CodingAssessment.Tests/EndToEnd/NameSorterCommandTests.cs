@@ -132,7 +132,10 @@ public sealed class NameSorterCommandTests : IDisposable
 
     private CommandResult RunNameSorter(params string[] arguments)
     {
-        ProcessStartInfo startInfo = new("dotnet")
+        // dotnet test sets DOTNET_HOST_PATH to the dotnet it runs on; use the same one so the right runtime is found.
+        string dotnet = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet";
+
+        ProcessStartInfo startInfo = new(dotnet)
         {
             WorkingDirectory = _workingFolder.Path,
             RedirectStandardOutput = true,
