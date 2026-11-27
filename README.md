@@ -72,15 +72,15 @@ If the input has a problem, the program stops before writing anything. The exit 
 
 ```
 src/DyeDurham.CodingAssessment/
-  Program.cs                 Entry point. Checks the argument and picks the concrete classes.
-  NameSortingService.cs      Reads, parses, sorts, then writes to every output.
-  ExitCodes.cs               Exit code values.
-  Domain/PersonName.cs       A name: one to three given names and a last name.
-  Parsing/NameParser.cs      Turns lines of text into names.
-  Sorting/NameSorter.cs      The sorting rule above, as one LINQ OrderBy/ThenBy chain.
-  IO/FileNameSource.cs       Reads the input file.
-  IO/ConsoleNameOutput.cs    Prints names to the screen.
-  IO/FileNameOutput.cs       Writes names to a file.
+  Program.cs                   Entry point. Checks the argument and picks the concrete classes.
+  NameSortingService.cs        Reads, parses, sorts, then writes to every output.
+  ExitCodes.cs                 Exit code values.
+  Domain/PersonName.cs         A name: one to three given names and a last name.
+  Parsing/NameParser.cs        Turns lines of text into names.
+  Sorting/NameSorter.cs        The sorting rule above, as one LINQ OrderBy/ThenBy chain.
+  Input/FileNameSource.cs      Reads the input file.
+  Output/ConsoleNameOutput.cs  Prints names to the screen.
+  Output/FileNameOutput.cs     Writes names to a file.
 tests/DyeDurham.CodingAssessment.Tests/
   One test class per class above, plus EndToEnd/ for the real program.
 ```

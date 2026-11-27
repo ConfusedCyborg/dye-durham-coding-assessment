@@ -1,6 +1,7 @@
 using System.Text;
 using DyeDurham.CodingAssessment;
-using DyeDurham.CodingAssessment.IO;
+using DyeDurham.CodingAssessment.Input;
+using DyeDurham.CodingAssessment.Output;
 using DyeDurham.CodingAssessment.Parsing;
 using DyeDurham.CodingAssessment.Sorting;
 

@@ -1,6 +1,6 @@
 using DyeDurham.CodingAssessment.Domain;
 
-namespace DyeDurham.CodingAssessment.IO;
+namespace DyeDurham.CodingAssessment.Output;
 
 /// <summary>
 /// Prints the names to the screen, one per line.
