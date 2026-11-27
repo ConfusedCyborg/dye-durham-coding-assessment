@@ -23,6 +23,8 @@ dotnet publish src/DyeDurham.CodingAssessment -c Release -o publish
 ./publish/name-sorter ./unsorted-names-list.txt
 ```
 
+In the Windows command prompt (cmd.exe), the second line is `publish\name-sorter ./unsorted-names-list.txt`.
+
 ## Test
 
 ```
@@ -35,7 +37,7 @@ the written file and the exit codes.
 ## Input
 
 One name per line: one to three given names, then the last name as the last word.
-Blank lines are skipped and extra spaces between words are ignored.
+Blank lines are skipped and extra spaces or tabs between words are ignored.
 
 ## Sorting rule
 
@@ -49,7 +51,7 @@ characters, so the output is the same on every run.
 
 ## Errors
 
-The program stops without writing anything if the input has a problem, and returns an exit code:
+If the input has a problem, the program stops before writing anything. The exit code says what happened:
 
 | Exit code | Meaning |
 |-----------|---------|
@@ -57,6 +59,7 @@ The program stops without writing anything if the input has a problem, and retur
 | 1 | Not exactly one argument given. Prints the usage. |
 | 2 | The input file does not exist. |
 | 3 | A line has no given name or more than three. The message gives the line number. |
+| 4 | A file could not be read or written, for example `sorted-names-list.txt` is read-only or open in another program. |
 
 ## Project layout
 
