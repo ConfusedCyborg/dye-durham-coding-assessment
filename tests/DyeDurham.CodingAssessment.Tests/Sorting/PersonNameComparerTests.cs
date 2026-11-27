@@ -47,10 +47,20 @@ public class PersonNameComparerTests
     [Fact]
     public void Ignores_case_when_comparing()
     {
-        var lowerCase = Name("adam", "baker");
-        var upperCase = Name("Brian", "Archer");
+        // A case-sensitive comparison would put "Baker" first, because upper case letters come before lower case ones.
+        var adamArcher = Name("adam", "archer");
+        var brianBaker = Name("Brian", "Baker");
 
-        Assert.True(_comparer.Compare(upperCase, lowerCase) < 0);
+        Assert.True(_comparer.Compare(adamArcher, brianBaker) < 0);
+    }
+
+    [Fact]
+    public void Lets_given_names_decide_before_case_does()
+    {
+        var adamSmith = Name("adam", "smith");
+        var zoeSmith = Name("Zoe", "Smith");
+
+        Assert.True(_comparer.Compare(adamSmith, zoeSmith) < 0);
     }
 
     [Fact]
@@ -63,7 +73,7 @@ public class PersonNameComparerTests
     }
 
     [Fact]
-    public void Orders_names_that_differ_only_by_case_the_same_way_every_time()
+    public void Puts_upper_case_first_when_names_differ_only_by_case()
     {
         var upperCase = Name("Adam", "Smith");
         var lowerCase = Name("adam", "smith");
