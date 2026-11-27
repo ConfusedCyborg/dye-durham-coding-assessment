@@ -10,14 +10,14 @@ public class NameSortingServiceTests
     [Fact]
     public void Run_ValidNames_WritesSameSortedListToEveryOutput()
     {
-        var source = new InMemoryNameSource("Janet Parsons", "Marin Alvarez", "Adonis Julius Archer");
-        var screen = new InMemoryNameOutput();
-        var file = new InMemoryNameOutput();
-        var service = CreateService(source, screen, file);
+        InMemoryNameSource source = new("Janet Parsons", "Marin Alvarez", "Adonis Julius Archer");
+        InMemoryNameOutput screen = new();
+        InMemoryNameOutput file = new();
+        NameSortingService service = CreateService(source, screen, file);
 
         service.Run();
 
-        var expected = new[] { "Marin Alvarez", "Adonis Julius Archer", "Janet Parsons" };
+        string[] expected = new[] { "Marin Alvarez", "Adonis Julius Archer", "Janet Parsons" };
         Assert.Equal(expected, screen.WrittenNames);
         Assert.Equal(expected, file.WrittenNames);
     }
@@ -25,9 +25,9 @@ public class NameSortingServiceTests
     [Fact]
     public void Run_InvalidName_WritesNothing()
     {
-        var source = new InMemoryNameSource("Janet Parsons", "Madonna");
-        var output = new InMemoryNameOutput();
-        var service = CreateService(source, output);
+        InMemoryNameSource source = new("Janet Parsons", "Madonna");
+        InMemoryNameOutput output = new();
+        NameSortingService service = CreateService(source, output);
 
         Assert.Throws<InvalidNameException>(() => service.Run());
         Assert.Empty(output.WrittenNames);

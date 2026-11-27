@@ -17,7 +17,7 @@ if (args.Length != 1)
     return ExitCodes.WrongArguments;
 }
 
-var unsortedFilePath = args[0];
+string unsortedFilePath = args[0];
 
 if (!File.Exists(unsortedFilePath))
 {
@@ -25,7 +25,7 @@ if (!File.Exists(unsortedFilePath))
     return ExitCodes.FileNotFound;
 }
 
-var service = new NameSortingService(
+NameSortingService service = new(
     new FileNameSource(unsortedFilePath),
     new NameParser(),
     new NameSorter(),

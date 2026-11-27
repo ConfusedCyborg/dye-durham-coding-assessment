@@ -7,7 +7,7 @@ public class PersonNameTests
     [Fact]
     public void FullName_ThreeGivenNames_JoinsAllPartsWithSpaces()
     {
-        var name = new PersonName(new[] { "Hunter", "Uriah", "Mathew" }, "Clarke");
+        PersonName name = new(new[] { "Hunter", "Uriah", "Mathew" }, "Clarke");
 
         Assert.Equal("Hunter Uriah Mathew Clarke", name.FullName);
     }
@@ -17,9 +17,9 @@ public class PersonNameTests
     [InlineData(3)]
     public void Constructor_OneToThreeGivenNames_CreatesName(int givenNameCount)
     {
-        var givenNames = Enumerable.Repeat("Given", givenNameCount).ToArray();
+        string[] givenNames = Enumerable.Repeat("Given", givenNameCount).ToArray();
 
-        var name = new PersonName(givenNames, "Last");
+        PersonName name = new(givenNames, "Last");
 
         Assert.Equal(givenNameCount, name.GivenNames.Count);
     }
@@ -29,7 +29,7 @@ public class PersonNameTests
     [InlineData(4)]
     public void Constructor_ZeroOrFourGivenNames_ThrowsArgumentException(int givenNameCount)
     {
-        var givenNames = Enumerable.Repeat("Given", givenNameCount).ToArray();
+        string[] givenNames = Enumerable.Repeat("Given", givenNameCount).ToArray();
 
         Assert.Throws<ArgumentException>(() => new PersonName(givenNames, "Last"));
     }
@@ -47,7 +47,7 @@ public class PersonNameTests
     [Fact]
     public void GivenNameAt_ExistingPosition_ReturnsGivenName()
     {
-        var name = new PersonName(new[] { "Adonis", "Julius" }, "Archer");
+        PersonName name = new(new[] { "Adonis", "Julius" }, "Archer");
 
         Assert.Equal("Adonis", name.GivenNameAt(0));
         Assert.Equal("Julius", name.GivenNameAt(1));
@@ -56,7 +56,7 @@ public class PersonNameTests
     [Fact]
     public void GivenNameAt_PositionPastLastGivenName_ReturnsNull()
     {
-        var name = new PersonName(new[] { "Adonis", "Julius" }, "Archer");
+        PersonName name = new(new[] { "Adonis", "Julius" }, "Archer");
 
         Assert.Null(name.GivenNameAt(2));
     }
@@ -64,8 +64,8 @@ public class PersonNameTests
     [Fact]
     public void Constructor_InputArrayChangedAfterwards_KeepsOriginalGivenNames()
     {
-        var givenNames = new[] { "Janet" };
-        var name = new PersonName(givenNames, "Parsons");
+        string[] givenNames = new[] { "Janet" };
+        PersonName name = new(givenNames, "Parsons");
 
         givenNames[0] = "Changed";
 

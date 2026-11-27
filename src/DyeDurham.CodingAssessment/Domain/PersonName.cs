@@ -10,7 +10,7 @@ public sealed class PersonName
 
     public PersonName(IEnumerable<string> givenNames, string lastName)
     {
-        var givenNameList = givenNames.ToList();
+        List<string> givenNameList = givenNames.ToList();
 
         if (!IsValidGivenNameCount(givenNameList.Count))
         {

@@ -12,7 +12,7 @@ public sealed class FileNameOutputTests : IDisposable
     [Fact]
     public void Write_TwoNames_WritesOneFullNamePerLine()
     {
-        var path = _folder.File("sorted.txt");
+        string path = _folder.File("sorted.txt");
 
         new FileNameOutput(path).Write(new[] { Name("Marin", "Alvarez"), Name("Adonis Julius", "Archer") });
 
@@ -22,7 +22,7 @@ public sealed class FileNameOutputTests : IDisposable
     [Fact]
     public void Write_FileAlreadyExists_ReplacesItsContent()
     {
-        var path = _folder.File("sorted.txt");
+        string path = _folder.File("sorted.txt");
         File.WriteAllLines(path, new[] { "Old Name", "Another Old Name", "Third Old Name" });
 
         new FileNameOutput(path).Write(new[] { Name("Marin", "Alvarez") });

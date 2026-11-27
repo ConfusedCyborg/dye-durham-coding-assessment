@@ -17,7 +17,7 @@ public sealed class ConsoleNameOutput : INameOutput
 
     public void Write(IReadOnlyList<PersonName> names)
     {
-        foreach (var name in names)
+        foreach (PersonName name in names)
         {
             _screen.WriteLine(name.FullName);
         }

@@ -1,3 +1,4 @@
+using DyeDurham.CodingAssessment.Domain;
 using DyeDurham.CodingAssessment.IO;
 using DyeDurham.CodingAssessment.Parsing;
 using DyeDurham.CodingAssessment.Sorting;
@@ -26,10 +27,10 @@ public sealed class NameSortingService
     /// <exception cref="InvalidNameException">A line in the source is not a valid name. Nothing is written.</exception>
     public void Run()
     {
-        var names = _parser.Parse(_source.ReadLines());
-        var sortedNames = _sorter.Sort(names);
+        IReadOnlyList<PersonName> names = _parser.Parse(_source.ReadLines());
+        IReadOnlyList<PersonName> sortedNames = _sorter.Sort(names);
 
-        foreach (var output in _outputs)
+        foreach (INameOutput output in _outputs)
         {
             output.Write(sortedNames);
         }

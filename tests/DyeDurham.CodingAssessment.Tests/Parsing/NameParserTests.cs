@@ -1,3 +1,4 @@
+using DyeDurham.CodingAssessment.Domain;
 using DyeDurham.CodingAssessment.Parsing;
 
 namespace DyeDurham.CodingAssessment.Tests.Parsing;
@@ -9,9 +10,9 @@ public class NameParserTests
     [Fact]
     public void Parse_ThreeGivenNames_UsesLastWordAsLastName()
     {
-        var names = _parser.Parse(new[] { "Hunter Uriah Mathew Clarke" });
+        IReadOnlyList<PersonName> names = _parser.Parse(new[] { "Hunter Uriah Mathew Clarke" });
 
-        var name = Assert.Single(names);
+        PersonName name = Assert.Single(names);
         Assert.Equal(new[] { "Hunter", "Uriah", "Mathew" }, name.GivenNames);
         Assert.Equal("Clarke", name.LastName);
     }
@@ -19,7 +20,7 @@ public class NameParserTests
     [Fact]
     public void Parse_OneGivenName_ReturnsGivenAndLastName()
     {
-        var name = Assert.Single(_parser.Parse(new[] { "Janet Parsons" }));
+        PersonName name = Assert.Single(_parser.Parse(new[] { "Janet Parsons" }));
 
         Assert.Equal(new[] { "Janet" }, name.GivenNames);
         Assert.Equal("Parsons", name.LastName);
@@ -28,7 +29,7 @@ public class NameParserTests
     [Fact]
     public void Parse_ExtraSpaces_IgnoresThem()
     {
-        var name = Assert.Single(_parser.Parse(new[] { "  Adonis   Julius  Archer  " }));
+        PersonName name = Assert.Single(_parser.Parse(new[] { "  Adonis   Julius  Archer  " }));
 
         Assert.Equal("Adonis Julius Archer", name.FullName);
     }
@@ -36,7 +37,7 @@ public class NameParserTests
     [Fact]
     public void Parse_TabBetweenWords_TreatsTabAsSeparator()
     {
-        var name = Assert.Single(_parser.Parse(new[] { "Janet\tParsons" }));
+        PersonName name = Assert.Single(_parser.Parse(new[] { "Janet\tParsons" }));
 
         Assert.Equal("Janet Parsons", name.FullName);
     }
@@ -44,7 +45,7 @@ public class NameParserTests
     [Fact]
     public void Parse_BlankLines_SkipsThem()
     {
-        var names = _parser.Parse(new[] { "Janet Parsons", "", "   ", "Vaughn Lewis" });
+        IReadOnlyList<PersonName> names = _parser.Parse(new[] { "Janet Parsons", "", "   ", "Vaughn Lewis" });
 
         Assert.Equal(new[] { "Janet Parsons", "Vaughn Lewis" }, names.Select(n => n.FullName));
     }
@@ -52,9 +53,9 @@ public class NameParserTests
     [Fact]
     public void Parse_NoGivenName_ThrowsWithLineNumber()
     {
-        var lines = new[] { "Janet Parsons", "", "Madonna" };
+        string[] lines = new[] { "Janet Parsons", "", "Madonna" };
 
-        var exception = Assert.Throws<InvalidNameException>(() => _parser.Parse(lines));
+        InvalidNameException exception = Assert.Throws<InvalidNameException>(() => _parser.Parse(lines));
 
         Assert.Equal(3, exception.LineNumber);
         Assert.Contains("Madonna", exception.Message);
@@ -63,9 +64,9 @@ public class NameParserTests
     [Fact]
     public void Parse_FourGivenNames_ThrowsWithLineNumber()
     {
-        var lines = new[] { "One Two Three Four Last" };
+        string[] lines = new[] { "One Two Three Four Last" };
 
-        var exception = Assert.Throws<InvalidNameException>(() => _parser.Parse(lines));
+        InvalidNameException exception = Assert.Throws<InvalidNameException>(() => _parser.Parse(lines));
 
         Assert.Equal(1, exception.LineNumber);
     }

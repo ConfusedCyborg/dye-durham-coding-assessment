@@ -10,7 +10,7 @@ public class NameSorterTests
     [Fact]
     public void Sort_BriefExample_ReturnsExpectedOrder()
     {
-        var sorted = Sort(
+        string[] sorted = Sort(
             "Janet Parsons",
             "Vaughn Lewis",
             "Adonis Julius Archer",
@@ -101,7 +101,7 @@ public class NameSorterTests
     [Fact]
     public void Sort_AnyList_LeavesInputUnchanged()
     {
-        var unsorted = Names("Janet Parsons", "Marin Alvarez");
+        List<PersonName> unsorted = Names("Janet Parsons", "Marin Alvarez");
 
         _sorter.Sort(unsorted);
 

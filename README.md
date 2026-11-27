@@ -81,3 +81,6 @@ tests/DyeDurham.CodingAssessment.Tests/
 Each class has one job and the service only knows the interfaces (`INameSource`, `INameParser`,
 `INameSorter`, `INameOutput`). To send the sorted names somewhere new, add a class that implements
 `INameOutput` and add it to the list in `Program.cs`. Nothing else changes.
+
+Code style lives in `.editorconfig` and is checked on every build: types are always written out (no `var`),
+and `new()` is used when the type is already on the left.

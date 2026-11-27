@@ -12,7 +12,7 @@ public sealed class TemporaryFolder : IDisposable
     public void Dispose()
     {
         // Some tests make a file read-only, which would stop the folder from being deleted on Windows.
-        foreach (var file in Directory.EnumerateFiles(Path))
+        foreach (string file in Directory.EnumerateFiles(Path))
         {
             System.IO.File.SetAttributes(file, FileAttributes.Normal);
         }

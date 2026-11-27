@@ -11,10 +11,10 @@ public sealed class FileNameSourceTests : IDisposable
     [Fact]
     public void ReadLines_FileWithBlankLine_ReturnsEveryLine()
     {
-        var path = _folder.File("names.txt");
+        string path = _folder.File("names.txt");
         File.WriteAllLines(path, new[] { "Janet Parsons", "", "Vaughn Lewis" });
 
-        var lines = new FileNameSource(path).ReadLines();
+        IEnumerable<string> lines = new FileNameSource(path).ReadLines();
 
         Assert.Equal(new[] { "Janet Parsons", "", "Vaughn Lewis" }, lines);
     }
@@ -22,10 +22,10 @@ public sealed class FileNameSourceTests : IDisposable
     [Fact]
     public void ReadLines_WindowsLineEndings_ReturnsLinesWithoutCarriageReturns()
     {
-        var path = _folder.File("names.txt");
+        string path = _folder.File("names.txt");
         File.WriteAllText(path, "Janet Parsons\r\nVaughn Lewis\r\n");
 
-        var lines = new FileNameSource(path).ReadLines();
+        IEnumerable<string> lines = new FileNameSource(path).ReadLines();
 
         Assert.Equal(new[] { "Janet Parsons", "Vaughn Lewis" }, lines);
     }

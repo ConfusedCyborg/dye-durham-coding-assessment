@@ -19,9 +19,9 @@ public sealed class NameParser : INameParser
 
     private static PersonName ParseLine(string line, int lineNumber)
     {
-        var words = line.Split(WordSeparators, StringSplitOptions.RemoveEmptyEntries);
-        var givenNames = words.SkipLast(1).ToArray();
-        var lastName = words.Last();
+        string[] words = line.Split(WordSeparators, StringSplitOptions.RemoveEmptyEntries);
+        string[] givenNames = words.SkipLast(1).ToArray();
+        string lastName = words.Last();
 
         // Checked here, before PersonName checks it too, so the error can say which line is wrong.
         if (!PersonName.IsValidGivenNameCount(givenNames.Length))

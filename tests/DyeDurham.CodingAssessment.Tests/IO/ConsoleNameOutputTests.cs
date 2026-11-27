@@ -8,8 +8,8 @@ public class ConsoleNameOutputTests
     [Fact]
     public void Write_TwoNames_PrintsOneFullNamePerLine()
     {
-        var screen = new StringWriter();
-        var output = new ConsoleNameOutput(screen);
+        StringWriter screen = new();
+        ConsoleNameOutput output = new(screen);
 
         output.Write(new[]
         {
@@ -17,7 +17,7 @@ public class ConsoleNameOutputTests
             new PersonName(new[] { "Adonis", "Julius" }, "Archer"),
         });
 
-        var expected = "Marin Alvarez" + Environment.NewLine + "Adonis Julius Archer" + Environment.NewLine;
+        string expected = "Marin Alvarez" + Environment.NewLine + "Adonis Julius Archer" + Environment.NewLine;
         Assert.Equal(expected, screen.ToString());
     }
 }

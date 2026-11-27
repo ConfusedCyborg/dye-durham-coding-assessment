@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <AssemblyName>name-sorter</AssemblyName>
     <RootNamespace>DyeDurham.CodingAssessment</RootNamespace>
   </PropertyGroup>
