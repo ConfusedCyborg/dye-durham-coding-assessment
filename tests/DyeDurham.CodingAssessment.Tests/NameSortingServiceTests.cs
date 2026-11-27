@@ -34,7 +34,7 @@ public class NameSortingServiceTests
     }
 
     private static NameSortingService CreateService(INameSource source, params INameOutput[] outputs) =>
-        new(source, new NameParser(), new NameSorter(new PersonNameComparer()), outputs);
+        new(source, new NameParser(), new NameSorter(), outputs);
 
     private sealed class InMemoryNameSource : INameSource
     {

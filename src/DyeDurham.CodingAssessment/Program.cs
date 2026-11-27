@@ -28,7 +28,7 @@ if (!File.Exists(unsortedFilePath))
 var service = new NameSortingService(
     new FileNameSource(unsortedFilePath),
     new NameParser(),
-    new NameSorter(new PersonNameComparer()),
+    new NameSorter(),
     new INameOutput[]
     {
         new ConsoleNameOutput(Console.Out),

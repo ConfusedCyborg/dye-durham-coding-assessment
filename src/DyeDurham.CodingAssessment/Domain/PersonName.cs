@@ -28,4 +28,11 @@ public sealed class PersonName
     public string LastName { get; }
 
     public string FullName => string.Join(' ', GivenNames.Append(LastName));
+
+    /// <summary>
+    /// The given name at a position (0 is the first), or null if the name has fewer given names.
+    /// Null sorts before any text, so "Adam Smith" comes before "Adam John Smith".
+    /// </summary>
+    public string? GivenNameAt(int position) =>
+        position < GivenNames.Count ? GivenNames[position] : null;
 }

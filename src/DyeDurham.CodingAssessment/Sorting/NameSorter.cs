@@ -3,17 +3,21 @@ using DyeDurham.CodingAssessment.Domain;
 namespace DyeDurham.CodingAssessment.Sorting;
 
 /// <summary>
-/// Sorts names with the comparer it is given, so the ordering rule can change without touching this class.
+/// Sorts names by last name, then by the first, second and third given name.
+/// A name with fewer given names comes first when the others match, because a missing given name is null.
+/// Case is ignored and accented letters sort next to their plain letters (invariant culture).
 /// </summary>
 public sealed class NameSorter : INameSorter
 {
-    private readonly IComparer<PersonName> _comparer;
-
-    public NameSorter(IComparer<PersonName> comparer)
-    {
-        _comparer = comparer;
-    }
+    private static readonly StringComparer IgnoringCase = StringComparer.InvariantCultureIgnoreCase;
 
     public IReadOnlyList<PersonName> Sort(IEnumerable<PersonName> names) =>
-        names.OrderBy(name => name, _comparer).ToList();
+        names
+            .OrderBy(name => name.LastName, IgnoringCase)
+            .ThenBy(name => name.GivenNameAt(0), IgnoringCase)
+            .ThenBy(name => name.GivenNameAt(1), IgnoringCase)
+            .ThenBy(name => name.GivenNameAt(2), IgnoringCase)
+            // Names equal apart from case are ordered by their exact characters, so the order never changes between runs.
+            .ThenBy(name => name.FullName, StringComparer.Ordinal)
+            .ToList();
 }

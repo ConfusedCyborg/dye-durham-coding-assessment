@@ -35,6 +35,23 @@ public class PersonNameTests
     }
 
     [Fact]
+    public void GivenNameAt_returns_the_given_name_at_that_position()
+    {
+        var name = new PersonName(new[] { "Adonis", "Julius" }, "Archer");
+
+        Assert.Equal("Adonis", name.GivenNameAt(0));
+        Assert.Equal("Julius", name.GivenNameAt(1));
+    }
+
+    [Fact]
+    public void GivenNameAt_returns_null_when_the_name_has_no_given_name_at_that_position()
+    {
+        var name = new PersonName(new[] { "Adonis", "Julius" }, "Archer");
+
+        Assert.Null(name.GivenNameAt(2));
+    }
+
+    [Fact]
     public void Keeps_its_own_copy_of_the_given_names()
     {
         var givenNames = new[] { "Janet" };
