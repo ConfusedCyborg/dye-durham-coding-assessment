@@ -7,6 +7,14 @@ namespace DyeDurham.CodingAssessment.Tests;
 /// </summary>
 public static class TestNames
 {
+    /// <summary>Lists of zero, one and two full names, for tests that write names somewhere.</summary>
+    public static TheoryData<string[]> SampleLists => new()
+    {
+        Array.Empty<string>(),
+        new[] { "Marin Alvarez" },
+        new[] { "Marin Alvarez", "Adonis Julius Archer" },
+    };
+
     public static List<PersonName> From(params string[] fullNames) =>
         fullNames
             .Select(fullName => fullName.Split(' '))

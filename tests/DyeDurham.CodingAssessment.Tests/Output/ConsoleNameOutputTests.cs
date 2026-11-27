@@ -4,15 +4,8 @@ namespace DyeDurham.CodingAssessment.Tests.Output;
 
 public class ConsoleNameOutputTests
 {
-    public static TheoryData<string[]> NameLists => new()
-    {
-        Array.Empty<string>(),
-        new[] { "Marin Alvarez" },
-        new[] { "Marin Alvarez", "Adonis Julius Archer" },
-    };
-
     [Theory]
-    [MemberData(nameof(NameLists))]
+    [MemberData(nameof(TestNames.SampleLists), MemberType = typeof(TestNames))]
     public void Write_Names_PrintsOneFullNamePerLine(string[] fullNames)
     {
         StringWriter screen = new();

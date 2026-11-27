@@ -30,7 +30,7 @@ public sealed class NameSorterCommandTests : IDisposable
     public void Dispose() => _workingFolder.Dispose();
 
     [Fact]
-    public void Run_BriefExample_PrintsSortedNames()
+    public void Run_BriefExample_PrintsAndWritesSortedNamesAndExitsWith0()
     {
         CopyExampleIntoWorkingFolder();
 
@@ -38,15 +38,6 @@ public sealed class NameSorterCommandTests : IDisposable
 
         Assert.Equal(0, result.ExitCode);
         Assert.Equal(ExpectedSortedExample, Lines(result.Output));
-    }
-
-    [Fact]
-    public void Run_BriefExample_WritesSortedNamesToFileInWorkingFolder()
-    {
-        CopyExampleIntoWorkingFolder();
-
-        RunNameSorter("./unsorted-names-list.txt");
-
         Assert.Equal(ExpectedSortedExample, File.ReadAllLines(_workingFolder.File("sorted-names-list.txt")));
     }
 

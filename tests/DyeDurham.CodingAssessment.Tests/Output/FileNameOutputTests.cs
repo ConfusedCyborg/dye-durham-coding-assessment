@@ -8,15 +8,8 @@ public sealed class FileNameOutputTests : IDisposable
 
     public void Dispose() => _folder.Dispose();
 
-    public static TheoryData<string[]> NameLists => new()
-    {
-        Array.Empty<string>(),
-        new[] { "Marin Alvarez" },
-        new[] { "Marin Alvarez", "Adonis Julius Archer" },
-    };
-
     [Theory]
-    [MemberData(nameof(NameLists))]
+    [MemberData(nameof(TestNames.SampleLists), MemberType = typeof(TestNames))]
     public void Write_Names_WritesOneFullNamePerLine(string[] fullNames)
     {
         string path = _folder.File("sorted.txt");
