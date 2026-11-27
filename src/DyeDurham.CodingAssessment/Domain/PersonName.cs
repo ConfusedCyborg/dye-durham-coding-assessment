@@ -1,0 +1,31 @@
+namespace DyeDurham.CodingAssessment.Domain;
+
+/// <summary>
+/// A person's name: one to three given names followed by a single last name.
+/// </summary>
+public sealed class PersonName
+{
+    public const int MinGivenNames = 1;
+    public const int MaxGivenNames = 3;
+
+    public PersonName(IEnumerable<string> givenNames, string lastName)
+    {
+        var givenNameList = givenNames.ToList();
+
+        if (givenNameList.Count < MinGivenNames || givenNameList.Count > MaxGivenNames)
+        {
+            throw new ArgumentException(
+                $"A name must have between {MinGivenNames} and {MaxGivenNames} given names, but had {givenNameList.Count}.",
+                nameof(givenNames));
+        }
+
+        GivenNames = givenNameList.AsReadOnly();
+        LastName = lastName;
+    }
+
+    public IReadOnlyList<string> GivenNames { get; }
+
+    public string LastName { get; }
+
+    public string FullName => string.Join(' ', GivenNames.Append(LastName));
+}
