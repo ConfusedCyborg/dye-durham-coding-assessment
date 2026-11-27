@@ -30,7 +30,7 @@ public sealed class NameSorterCommandTests : IDisposable
     public void Dispose() => _workingFolder.Dispose();
 
     [Fact]
-    public void Prints_the_example_from_the_brief_sorted_to_the_screen()
+    public void Run_BriefExample_PrintsSortedNames()
     {
         CopyExampleIntoWorkingFolder();
 
@@ -41,7 +41,7 @@ public sealed class NameSorterCommandTests : IDisposable
     }
 
     [Fact]
-    public void Writes_the_example_from_the_brief_sorted_to_a_file_in_the_working_folder()
+    public void Run_BriefExample_WritesSortedNamesToFileInWorkingFolder()
     {
         CopyExampleIntoWorkingFolder();
 
@@ -51,7 +51,7 @@ public sealed class NameSorterCommandTests : IDisposable
     }
 
     [Fact]
-    public void Prints_accented_names_correctly()
+    public void Run_AccentedNames_PrintsThemCorrectly()
     {
         File.WriteAllLines(_workingFolder.File("names.txt"), new[] { "Émile Émond" });
 
@@ -61,7 +61,7 @@ public sealed class NameSorterCommandTests : IDisposable
     }
 
     [Fact]
-    public void Writes_an_empty_file_when_the_input_is_empty()
+    public void Run_EmptyFile_WritesEmptyFile()
     {
         File.WriteAllText(_workingFolder.File("names.txt"), "");
 
@@ -72,7 +72,7 @@ public sealed class NameSorterCommandTests : IDisposable
     }
 
     [Fact]
-    public void Shows_how_to_use_it_when_given_no_file()
+    public void Run_NoArguments_PrintsUsageAndExitsWith1()
     {
         var result = RunNameSorter();
 
@@ -81,7 +81,7 @@ public sealed class NameSorterCommandTests : IDisposable
     }
 
     [Fact]
-    public void Shows_how_to_use_it_when_given_two_files()
+    public void Run_TwoArguments_PrintsUsageAndExitsWith1()
     {
         var result = RunNameSorter("first.txt", "second.txt");
 
@@ -90,7 +90,7 @@ public sealed class NameSorterCommandTests : IDisposable
     }
 
     [Fact]
-    public void Explains_when_the_file_does_not_exist()
+    public void Run_MissingFile_NamesFileAndExitsWith2()
     {
         var result = RunNameSorter("./missing.txt");
 
@@ -99,7 +99,7 @@ public sealed class NameSorterCommandTests : IDisposable
     }
 
     [Fact]
-    public void Explains_which_line_holds_an_invalid_name_and_writes_no_file()
+    public void Run_InvalidName_ReportsLineAndExitsWith3WithoutWritingFile()
     {
         File.WriteAllLines(_workingFolder.File("names.txt"), new[] { "Janet Parsons", "Madonna" });
 
@@ -111,7 +111,7 @@ public sealed class NameSorterCommandTests : IDisposable
     }
 
     [Fact]
-    public void Explains_when_the_sorted_file_cannot_be_written()
+    public void Run_ReadOnlyOutputFile_ExitsWith4()
     {
         CopyExampleIntoWorkingFolder();
         var sortedFile = _workingFolder.File("sorted-names-list.txt");

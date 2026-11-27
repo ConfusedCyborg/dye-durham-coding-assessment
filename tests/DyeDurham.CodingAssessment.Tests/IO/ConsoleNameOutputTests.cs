@@ -6,7 +6,7 @@ namespace DyeDurham.CodingAssessment.Tests.IO;
 public class ConsoleNameOutputTests
 {
     [Fact]
-    public void Writes_one_full_name_per_line()
+    public void Write_TwoNames_PrintsOneFullNamePerLine()
     {
         var screen = new StringWriter();
         var output = new ConsoleNameOutput(screen);

@@ -8,7 +8,7 @@ public class NameSorterTests
     private readonly NameSorter _sorter = new();
 
     [Fact]
-    public void Sorts_the_example_from_the_brief_into_the_expected_order()
+    public void Sort_BriefExample_ReturnsExpectedOrder()
     {
         var sorted = Sort(
             "Janet Parsons",
@@ -42,56 +42,56 @@ public class NameSorterTests
     }
 
     [Fact]
-    public void Sorts_by_last_name_first()
+    public void Sort_DifferentLastNames_OrdersByLastName()
     {
         Assert.Equal(new[] { "Zoe Alvarez", "Adam Bentley" }, Sort("Adam Bentley", "Zoe Alvarez"));
     }
 
     [Fact]
-    public void Sorts_by_given_names_in_order_when_last_names_match()
+    public void Sort_SameLastName_OrdersByGivenNames()
     {
         Assert.Equal(new[] { "Adam John Smith", "Adam Peter Smith" }, Sort("Adam Peter Smith", "Adam John Smith"));
     }
 
     [Fact]
-    public void Compares_the_first_given_name_before_the_second()
+    public void Sort_DifferentFirstGivenNames_IgnoresSecondGivenName()
     {
         Assert.Equal(new[] { "Adam Zed Smith", "Beth Ann Smith" }, Sort("Beth Ann Smith", "Adam Zed Smith"));
     }
 
     [Fact]
-    public void Puts_the_name_with_fewer_given_names_first_when_the_shared_ones_match()
+    public void Sort_SharedGivenNamesMatch_PutsFewerGivenNamesFirst()
     {
         Assert.Equal(new[] { "Adam Smith", "Adam John Smith" }, Sort("Adam John Smith", "Adam Smith"));
     }
 
     [Fact]
-    public void Ignores_case()
+    public void Sort_MixedCase_IgnoresCase()
     {
         // A case-sensitive sort would put "Baker" first, because upper case letters come before lower case ones.
         Assert.Equal(new[] { "adam archer", "Brian Baker" }, Sort("Brian Baker", "adam archer"));
     }
 
     [Fact]
-    public void Lets_given_names_decide_before_case_does()
+    public void Sort_LastNamesDifferOnlyByCase_OrdersByGivenNames()
     {
         Assert.Equal(new[] { "adam smith", "Zoe Smith" }, Sort("Zoe Smith", "adam smith"));
     }
 
     [Fact]
-    public void Sorts_accented_letters_next_to_their_plain_letters()
+    public void Sort_AccentedLastName_SortsNextToPlainLetter()
     {
         Assert.Equal(new[] { "Zoe Émond", "Adam Fisher" }, Sort("Adam Fisher", "Zoe Émond"));
     }
 
     [Fact]
-    public void Puts_upper_case_first_when_names_differ_only_by_case()
+    public void Sort_NamesDifferOnlyByCase_PutsUpperCaseFirst()
     {
         Assert.Equal(new[] { "Adam Smith", "adam smith" }, Sort("adam smith", "Adam Smith"));
     }
 
     [Fact]
-    public void Keeps_duplicate_names()
+    public void Sort_DuplicateNames_KeepsBoth()
     {
         Assert.Equal(
             new[] { "Marin Alvarez", "Leo Gardner", "Leo Gardner" },
@@ -99,7 +99,7 @@ public class NameSorterTests
     }
 
     [Fact]
-    public void Does_not_change_the_list_it_was_given()
+    public void Sort_AnyList_LeavesInputUnchanged()
     {
         var unsorted = Names("Janet Parsons", "Marin Alvarez");
 

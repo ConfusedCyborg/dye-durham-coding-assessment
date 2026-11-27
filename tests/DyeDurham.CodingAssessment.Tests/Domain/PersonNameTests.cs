@@ -5,7 +5,7 @@ namespace DyeDurham.CodingAssessment.Tests.Domain;
 public class PersonNameTests
 {
     [Fact]
-    public void FullName_joins_given_names_and_last_name_with_single_spaces()
+    public void FullName_ThreeGivenNames_JoinsAllPartsWithSpaces()
     {
         var name = new PersonName(new[] { "Hunter", "Uriah", "Mathew" }, "Clarke");
 
@@ -15,7 +15,7 @@ public class PersonNameTests
     [Theory]
     [InlineData(1)]
     [InlineData(3)]
-    public void Accepts_between_one_and_three_given_names(int givenNameCount)
+    public void Constructor_OneToThreeGivenNames_CreatesName(int givenNameCount)
     {
         var givenNames = Enumerable.Repeat("Given", givenNameCount).ToArray();
 
@@ -27,7 +27,7 @@ public class PersonNameTests
     [Theory]
     [InlineData(0)]
     [InlineData(4)]
-    public void Rejects_fewer_than_one_or_more_than_three_given_names(int givenNameCount)
+    public void Constructor_ZeroOrFourGivenNames_ThrowsArgumentException(int givenNameCount)
     {
         var givenNames = Enumerable.Repeat("Given", givenNameCount).ToArray();
 
@@ -35,7 +35,7 @@ public class PersonNameTests
     }
 
     [Fact]
-    public void GivenNameAt_returns_the_given_name_at_that_position()
+    public void GivenNameAt_ExistingPosition_ReturnsGivenName()
     {
         var name = new PersonName(new[] { "Adonis", "Julius" }, "Archer");
 
@@ -44,7 +44,7 @@ public class PersonNameTests
     }
 
     [Fact]
-    public void GivenNameAt_returns_null_when_the_name_has_no_given_name_at_that_position()
+    public void GivenNameAt_PositionPastLastGivenName_ReturnsNull()
     {
         var name = new PersonName(new[] { "Adonis", "Julius" }, "Archer");
 
@@ -52,7 +52,7 @@ public class PersonNameTests
     }
 
     [Fact]
-    public void Keeps_its_own_copy_of_the_given_names()
+    public void Constructor_InputArrayChangedAfterwards_KeepsOriginalGivenNames()
     {
         var givenNames = new[] { "Janet" };
         var name = new PersonName(givenNames, "Parsons");

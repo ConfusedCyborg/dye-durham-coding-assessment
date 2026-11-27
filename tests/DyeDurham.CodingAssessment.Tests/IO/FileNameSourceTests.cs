@@ -9,7 +9,7 @@ public sealed class FileNameSourceTests : IDisposable
     public void Dispose() => _folder.Dispose();
 
     [Fact]
-    public void Reads_every_line_of_the_file()
+    public void ReadLines_FileWithBlankLine_ReturnsEveryLine()
     {
         var path = _folder.File("names.txt");
         File.WriteAllLines(path, new[] { "Janet Parsons", "", "Vaughn Lewis" });
@@ -20,7 +20,7 @@ public sealed class FileNameSourceTests : IDisposable
     }
 
     [Fact]
-    public void Reads_files_saved_with_windows_line_endings_on_any_system()
+    public void ReadLines_WindowsLineEndings_ReturnsLinesWithoutCarriageReturns()
     {
         var path = _folder.File("names.txt");
         File.WriteAllText(path, "Janet Parsons\r\nVaughn Lewis\r\n");

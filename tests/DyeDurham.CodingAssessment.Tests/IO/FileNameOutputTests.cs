@@ -10,7 +10,7 @@ public sealed class FileNameOutputTests : IDisposable
     public void Dispose() => _folder.Dispose();
 
     [Fact]
-    public void Writes_one_full_name_per_line()
+    public void Write_TwoNames_WritesOneFullNamePerLine()
     {
         var path = _folder.File("sorted.txt");
 
@@ -20,7 +20,7 @@ public sealed class FileNameOutputTests : IDisposable
     }
 
     [Fact]
-    public void Replaces_what_was_in_the_file_before()
+    public void Write_FileAlreadyExists_ReplacesItsContent()
     {
         var path = _folder.File("sorted.txt");
         File.WriteAllLines(path, new[] { "Old Name", "Another Old Name", "Third Old Name" });

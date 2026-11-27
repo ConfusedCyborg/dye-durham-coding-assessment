@@ -8,7 +8,7 @@ namespace DyeDurham.CodingAssessment.Tests;
 public class NameSortingServiceTests
 {
     [Fact]
-    public void Sends_the_same_sorted_names_to_every_output()
+    public void Run_ValidNames_WritesSameSortedListToEveryOutput()
     {
         var source = new InMemoryNameSource("Janet Parsons", "Marin Alvarez", "Adonis Julius Archer");
         var screen = new InMemoryNameOutput();
@@ -23,7 +23,7 @@ public class NameSortingServiceTests
     }
 
     [Fact]
-    public void Writes_nothing_when_a_name_is_invalid()
+    public void Run_InvalidName_WritesNothing()
     {
         var source = new InMemoryNameSource("Janet Parsons", "Madonna");
         var output = new InMemoryNameOutput();

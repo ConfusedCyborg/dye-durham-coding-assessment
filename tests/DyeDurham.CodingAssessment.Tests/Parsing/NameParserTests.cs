@@ -7,7 +7,7 @@ public class NameParserTests
     private readonly NameParser _parser = new();
 
     [Fact]
-    public void Treats_the_last_word_as_the_last_name_and_the_rest_as_given_names()
+    public void Parse_ThreeGivenNames_UsesLastWordAsLastName()
     {
         var names = _parser.Parse(new[] { "Hunter Uriah Mathew Clarke" });
 
@@ -17,7 +17,7 @@ public class NameParserTests
     }
 
     [Fact]
-    public void Parses_a_name_with_a_single_given_name()
+    public void Parse_OneGivenName_ReturnsGivenAndLastName()
     {
         var name = Assert.Single(_parser.Parse(new[] { "Janet Parsons" }));
 
@@ -26,7 +26,7 @@ public class NameParserTests
     }
 
     [Fact]
-    public void Ignores_leading_trailing_and_repeated_spaces()
+    public void Parse_ExtraSpaces_IgnoresThem()
     {
         var name = Assert.Single(_parser.Parse(new[] { "  Adonis   Julius  Archer  " }));
 
@@ -34,7 +34,7 @@ public class NameParserTests
     }
 
     [Fact]
-    public void Accepts_tabs_between_words()
+    public void Parse_TabBetweenWords_TreatsTabAsSeparator()
     {
         var name = Assert.Single(_parser.Parse(new[] { "Janet\tParsons" }));
 
@@ -42,7 +42,7 @@ public class NameParserTests
     }
 
     [Fact]
-    public void Skips_blank_lines()
+    public void Parse_BlankLines_SkipsThem()
     {
         var names = _parser.Parse(new[] { "Janet Parsons", "", "   ", "Vaughn Lewis" });
 
@@ -50,7 +50,7 @@ public class NameParserTests
     }
 
     [Fact]
-    public void Rejects_a_name_with_no_given_name_and_reports_its_line_number()
+    public void Parse_NoGivenName_ThrowsWithLineNumber()
     {
         var lines = new[] { "Janet Parsons", "", "Madonna" };
 
@@ -61,7 +61,7 @@ public class NameParserTests
     }
 
     [Fact]
-    public void Rejects_a_name_with_more_than_three_given_names_and_reports_its_line_number()
+    public void Parse_FourGivenNames_ThrowsWithLineNumber()
     {
         var lines = new[] { "One Two Three Four Last" };
 
