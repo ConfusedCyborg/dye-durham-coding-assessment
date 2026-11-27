@@ -7,6 +7,7 @@ namespace DyeDurham.CodingAssessment.Parsing;
 /// </summary>
 public interface INameParser
 {
-    /// <exception cref="InvalidNameException">A line does not hold a valid name.</exception>
+    /// <summary>Returns one name per non-blank line, in the same order as the lines.</summary>
+    /// <exception cref="InvalidNameException">One or more lines do not hold a valid name; all of them are listed.</exception>
     IReadOnlyList<PersonName> Parse(IEnumerable<string> lines);
 }

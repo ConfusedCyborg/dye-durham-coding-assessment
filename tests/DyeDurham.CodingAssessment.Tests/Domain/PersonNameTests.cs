@@ -57,7 +57,7 @@ public class PersonNameTests
     [InlineData(0, false)]
     [InlineData(4, false)]
     [InlineData(-1, false)]
-    public void IsValidGivenNameCount_Count_ReturnsWhetherOneToThree(int givenNameCount, bool expected)
+    public void IsValidGivenNameCount_VariousCounts_ReturnsTrueOnlyForOneToThree(int givenNameCount, bool expected)
     {
         Assert.Equal(expected, PersonName.IsValidGivenNameCount(givenNameCount));
     }

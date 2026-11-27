@@ -14,13 +14,13 @@ public sealed class NameParser : INameParser
     public IReadOnlyList<PersonName> Parse(IEnumerable<string> lines)
     {
         List<NameLine> nameLines = lines
-            .Select((text, index) => new NameLine(Number: index + 1, Text: text.Trim()))
+            .Select((text, index) => new NameLine(LineNumber: index + 1, Text: text.Trim()))
             .Where(line => !line.IsBlank)
             .ToList();
 
         List<InvalidLine> invalidLines = nameLines
             .Where(line => !line.HasValidGivenNameCount)
-            .Select(line => new InvalidLine(line.Number, line.Text))
+            .Select(line => new InvalidLine(line.LineNumber, line.Text))
             .ToList();
 
         if (invalidLines.Count > 0)
@@ -36,7 +36,7 @@ public sealed class NameParser : INameParser
     /// <summary>
     /// One line of input with its line number, split into words.
     /// </summary>
-    private sealed record NameLine(int Number, string Text)
+    private sealed record NameLine(int LineNumber, string Text)
     {
         private string[] Words { get; } = Text.Split(WordSeparators, StringSplitOptions.RemoveEmptyEntries);
 

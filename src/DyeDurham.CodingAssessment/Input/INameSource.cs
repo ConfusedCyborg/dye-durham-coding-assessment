@@ -5,5 +5,6 @@ namespace DyeDurham.CodingAssessment.Input;
 /// </summary>
 public interface INameSource
 {
+    /// <summary>Returns every line of the source, including blank ones, without line endings.</summary>
     IEnumerable<string> ReadLines();
 }

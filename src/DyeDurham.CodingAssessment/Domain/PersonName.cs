@@ -23,14 +23,15 @@ public sealed class PersonName
         LastName = lastName;
     }
 
-    public static bool IsValidGivenNameCount(int count) =>
-        count >= MinGivenNames && count <= MaxGivenNames;
-
     public IReadOnlyList<string> GivenNames { get; }
 
     public string LastName { get; }
 
     public string FullName => string.Join(' ', GivenNames.Append(LastName));
+
+    /// <summary>True when a name may have this many given names (one to three).</summary>
+    public static bool IsValidGivenNameCount(int count) =>
+        count >= MinGivenNames && count <= MaxGivenNames;
 
     /// <summary>
     /// The given name at a position (0 is the first), or null if the name has fewer given names.

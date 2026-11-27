@@ -38,7 +38,7 @@ public class NameSorterTests
 
     [Theory]
     [MemberData(nameof(NameLists))]
-    public void Sort_NameList_ReturnsExpectedOrder(string[] unsorted, string[] expected)
+    public void Sort_NameList_OrdersByLastNameThenGivenNames(string[] unsorted, string[] expected)
     {
         Assert.Equal(expected, Sort(unsorted));
     }

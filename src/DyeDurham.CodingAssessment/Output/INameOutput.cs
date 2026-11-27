@@ -7,5 +7,6 @@ namespace DyeDurham.CodingAssessment.Output;
 /// </summary>
 public interface INameOutput
 {
+    /// <summary>Writes the names in the order given, one full name per line.</summary>
     void Write(IReadOnlyList<PersonName> names);
 }
