@@ -107,6 +107,18 @@ public sealed class NameSorterCommandTests : IDisposable
     }
 
     [Fact]
+    public void Run_SeveralInvalidNames_ReportsEveryLineAndExitsWith3()
+    {
+        File.WriteAllLines(_workingFolder.File("names.txt"), new[] { "Madonna", "Janet Parsons", "One Two Three Four Last" });
+
+        CommandResult result = RunNameSorter("./names.txt");
+
+        Assert.Equal(3, result.ExitCode);
+        Assert.Contains("Line 1 (\"Madonna\")", result.Error);
+        Assert.Contains("Line 3 (\"One Two Three Four Last\")", result.Error);
+    }
+
+    [Fact]
     public void Run_ReadOnlyOutputFile_ExitsWith4WithoutPrintingNames()
     {
         CopyExampleIntoWorkingFolder();

@@ -65,7 +65,7 @@ If the input has a problem, the program stops before writing anything. The exit 
 | 0 | Names sorted and written. |
 | 1 | Not exactly one argument given. Prints the usage. |
 | 2 | The input file does not exist. |
-| 3 | A line has no given name or more than three. The message gives the line number. |
+| 3 | One or more lines have no given name or more than three. The message lists every one with its line number. |
 | 4 | A file could not be read or written, for example `sorted-names-list.txt` is read-only or open in another program. |
 
 ## Project layout

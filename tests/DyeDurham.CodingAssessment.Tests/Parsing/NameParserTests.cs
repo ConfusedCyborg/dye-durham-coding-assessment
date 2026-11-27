@@ -43,7 +43,24 @@ public class NameParserTests
 
         InvalidNameException exception = Assert.Throws<InvalidNameException>(() => _parser.Parse(lines));
 
-        Assert.Equal(3, exception.LineNumber);
-        Assert.Contains(invalidLine.Trim(), exception.Message);
+        InvalidLine reported = Assert.Single(exception.InvalidLines);
+        Assert.Equal(3, reported.LineNumber);
+        Assert.Equal(invalidLine.Trim(), reported.Text);
+    }
+
+    public static TheoryData<string[], int[]> LinesWithSeveralInvalidNames => new()
+    {
+        { new[] { "Madonna", "Janet Parsons", "Cher" }, new[] { 1, 3 } },
+        { new[] { "Janet Parsons", "", "Madonna", "One Two Three Four Last" }, new[] { 3, 4 } },
+        { new[] { "Madonna", "Cher", "Prince" }, new[] { 1, 2, 3 } },
+    };
+
+    [Theory]
+    [MemberData(nameof(LinesWithSeveralInvalidNames))]
+    public void Parse_SeveralInvalidLines_ReportsEveryOneInOrder(string[] lines, int[] expectedLineNumbers)
+    {
+        InvalidNameException exception = Assert.Throws<InvalidNameException>(() => _parser.Parse(lines));
+
+        Assert.Equal(expectedLineNumbers, exception.InvalidLines.Select(line => line.LineNumber));
     }
 }

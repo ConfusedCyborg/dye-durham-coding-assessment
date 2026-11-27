@@ -32,7 +32,7 @@ try
 }
 catch (InvalidNameException exception)
 {
-    return Fail(ExitCodes.InvalidName, $"Could not sort the names. {exception.Message}");
+    return Fail(ExitCodes.InvalidName, $"Could not sort the names:{Environment.NewLine}{exception.Message}");
 }
 catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
 {

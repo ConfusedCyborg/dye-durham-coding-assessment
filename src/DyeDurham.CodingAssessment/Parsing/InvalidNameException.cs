@@ -1,16 +1,25 @@
+using DyeDurham.CodingAssessment.Domain;
+
 namespace DyeDurham.CodingAssessment.Parsing;
 
 /// <summary>
-/// Thrown when a line of input cannot be read as a person name.
+/// Thrown when one or more lines of input cannot be read as a person name.
+/// The message lists every invalid line, so they can all be fixed in one go.
 /// </summary>
 public sealed class InvalidNameException : Exception
 {
-    public InvalidNameException(int lineNumber, string line, string reason)
-        : base($"Line {lineNumber} (\"{line}\"): {reason}")
+    public InvalidNameException(IReadOnlyList<InvalidLine> invalidLines)
+        : base(DescribeEach(invalidLines))
     {
-        LineNumber = lineNumber;
+        InvalidLines = invalidLines;
     }
 
-    /// <summary>The 1-based line number in the input, counting blank lines.</summary>
-    public int LineNumber { get; }
+    public IReadOnlyList<InvalidLine> InvalidLines { get; }
+
+    private static string DescribeEach(IEnumerable<InvalidLine> invalidLines) =>
+        string.Join(
+            Environment.NewLine,
+            invalidLines.Select(line =>
+                $"Line {line.LineNumber} (\"{line.Text}\"): " +
+                $"expected {PersonName.MinGivenNames} to {PersonName.MaxGivenNames} given names followed by a last name."));
 }
