@@ -37,6 +37,19 @@ public class NameSortingServiceTests
         Assert.All(outputs, output => Assert.Empty(output.WrittenNames));
     }
 
+    [Fact]
+    public void Run_OutputThrows_StopsAndSkipsTheOutputsAfterIt()
+    {
+        InMemoryNameSource source = new("Janet Parsons");
+        InMemoryNameOutput before = new();
+        InMemoryNameOutput after = new();
+        NameSortingService service = CreateService(source, new INameOutput[] { before, new FailingNameOutput(), after });
+
+        Assert.Throws<IOException>(() => service.Run());
+        Assert.Equal(new[] { "Janet Parsons" }, before.WrittenNames);
+        Assert.Empty(after.WrittenNames);
+    }
+
     private static InMemoryNameOutput[] CreateOutputs(int count) =>
         Enumerable.Range(0, count).Select(_ => new InMemoryNameOutput()).ToArray();
 
@@ -50,6 +63,11 @@ public class NameSortingServiceTests
         public InMemoryNameSource(params string[] lines) => _lines = lines;
 
         public IEnumerable<string> ReadLines() => _lines;
+    }
+
+    private sealed class FailingNameOutput : INameOutput
+    {
+        public void Write(IReadOnlyList<PersonName> names) => throw new IOException("The output could not be written.");
     }
 
     private sealed class InMemoryNameOutput : INameOutput

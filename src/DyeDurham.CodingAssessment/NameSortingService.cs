@@ -9,6 +9,7 @@ namespace DyeDurham.CodingAssessment;
 /// <summary>
 /// The whole job in one place: read the names, parse them, sort them, then write them to every output.
 /// It only knows the interfaces, so each step can be swapped or tested on its own.
+/// Outputs are written in the order given; if one throws, the ones after it are not written.
 /// </summary>
 public sealed class NameSortingService
 {
@@ -25,7 +26,7 @@ public sealed class NameSortingService
         _outputs = outputs.ToList();
     }
 
-    /// <exception cref="InvalidNameException">A line in the source is not a valid name. Nothing is written.</exception>
+    /// <exception cref="InvalidNameException">One or more lines in the source are not valid names. Nothing is written.</exception>
     public void Run()
     {
         IReadOnlyList<PersonName> names = _parser.Parse(_source.ReadLines());
